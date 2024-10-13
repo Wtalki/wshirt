@@ -59,10 +59,20 @@
             <!--begin::Content container-->
             <div id="kt_app_content_container" class="app-container container-fluid">
                 <!--begin::Products-->
-                <form action="{{route('category#edit')}}" method="post">
+                <form action="{{route('category#edit')}}" method="post" enctype="multipart/form-data">
                     @csrf
                     <div class="row">
-                        <div class="col-12">
+                        <div class="col-4">
+                            <div class="card">
+                                <div class="card-header ">
+                                    <h1 class="align-self-center">Image</h1>
+                                </div>
+                                <div class="card-body">
+                                    <x-image placeholder="{{asset('storage/images/'.$data->image)}}" :isMultiple='false' name='image' type="editImage" :old="$data->image" />
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-8">
                             <div class="card">
                                 <div class="card-header d-flex justify-content-between">
                                     <h1 class="align-self-center">Category edit</h1>
@@ -93,16 +103,14 @@
                                 <div class="card-body">
                                     <input type="hidden" name="id" value="{{$data->id}}">
                                     <!--begin::Input group-->
-                                    <div class="rounded border d-flex flex-column p-10 mb-5">
-                                        <label class="form-label" id="">Name</label>
-                                        <input type="text" class="form-control" name="name" value="{{old('name',$data->name)}}" placeholder="Username" aria-label="Username" aria-describedby="basic-addon1" />
-                                        @error('name')
-                                        <div class="text-danger">{{$message}}</div>
-                                        @enderror
-                                    </div>
+                                    <x-input name="name" type="edit" label="Name" placeholder="Category Name.." :old="$data->name" />
+                                    <textarea name="description" class="form-control" id="" cols="30" rows="10" placeholder="Description">{{ $data->description }}</textarea>
+                                    @error('description')
+                                        <div class="text-danger">{{ $message}}</div>
+                                    @enderror
                                 </div>
-                                <div class="text-end mb-2">
-                                    <button class="btn btn-primary w-25">Save</button>
+                                <div class="text-center mb-2">
+                                    <x-button class="p-5 btn-primary w-25" text="Update" type='update' />
                                 </div>
                             </div>
                         </div>

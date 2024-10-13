@@ -15,6 +15,10 @@ return new class extends Migration
             $table->id();
             $table->unsignedBigInteger('category_id');
             $table->string('name');
+            $table->integer('sku_number');
+            $table->integer('barcode_number');
+            $table->integer('qty');
+
             $table->string('price');
             $table->longText('description');
             $table->string('type');
