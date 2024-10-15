@@ -11,17 +11,17 @@ class Product extends Model
     protected $fillable = [
         'category_id',
         'name',
-        'description',
-        'price',
-        'price',
-        'type',
-        'color',
-        'cover',
-        'heart',
-        'heart_status',
-        'size',
-        'view_count',
+        'sku_number',
+        'stock',
         'gender',
+        'price',
+        'status',
+        'template',
+        'description',
+        'type',
+        'cover',
+        'view_count',
+
     ];
 
     public function images(){
@@ -43,7 +43,11 @@ class Product extends Model
     public function reviews(){
         return $this->hasMany(CustomerReview::class);
     }
+    public function tags(){
+        return $this->hasMany(Tag::class);
+    }
     public function averageRating(){
         return $this->reviews()->latest()->take(5)->avg('rating');
     }
+
 }

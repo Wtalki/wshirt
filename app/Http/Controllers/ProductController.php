@@ -30,7 +30,9 @@ class ProductController extends Controller
 
     //product create
     function productCreate(Request $request){
+        dd($request->toArray());
         //product data
+
         $data = $this->productData($request);
         $product = Product::create($data);
 

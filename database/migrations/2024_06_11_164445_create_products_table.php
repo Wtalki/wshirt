@@ -15,16 +15,16 @@ return new class extends Migration
             $table->id();
             $table->unsignedBigInteger('category_id');
             $table->string('name');
-            $table->integer('sku_number');
-            $table->integer('barcode_number');
-            $table->integer('qty');
-
+            $table->integer('sku_number')->nullable();
+            $table->string('gender');
+            $table->integer('stock');
             $table->string('price');
+            $table->integer('status')->default(0);
+            $table->string('template')->nullable();
             $table->longText('description');
             $table->string('type');
             $table->string('cover')->nullable();
             $table->integer('view_count')->default(0);
-            $table->string('gender');
             $table->foreign('category_id')->references('id')->on('categories')->onDelete('cascade');
             $table->timestamps();
         });
