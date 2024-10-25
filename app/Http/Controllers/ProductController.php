@@ -19,7 +19,7 @@ class ProductController extends Controller
     //product list
     function productList(){
         $data = Product::with(['images','discounts','category','colors','sizes','tags'])->orderBy('created_at','desc')->get();
-        dd($data->toArray());
+        // dd($data->toArray());
         $category = Category::get();
         return view('product/productList',compact('data','category'));
     }
@@ -71,17 +71,21 @@ class ProductController extends Controller
                 Size::create($productSize);
             }
         }
+        // dd($request->toArray());
+
 
         //tags
-        foreach ($request->tags as $tagJson) {
-            $tags = json_decode($tagJson, true);
+        if ($request->tags[0] != null){
+            foreach ($request->tags as $tagJson) {
+                $tags = json_decode($tagJson, true);
 
-            foreach ($tags as $tag) {
-                $productTag = [
-                    'product_id' => $product->id,
-                    'tags' => $tag['value'],
-                ];
-                Tag::create($productTag);
+                foreach ($tags as $tag) {
+                    $productTag = [
+                        'product_id' => $product->id,
+                        'tags' => $tag['value'],
+                    ];
+                    Tag::create($productTag);
+                }
             }
         }
 
@@ -122,7 +126,7 @@ class ProductController extends Controller
 
     //edit product
     function editProduct($id){
-        $data = Product::where('id',$id)->with(['images','discounts','category','colors','sizes'])->orderBy('created_at','desc')->first();
+        $data = Product::where('id',$id)->with(['images','discounts','category','colors','sizes','tags'])->first();
         // dd($data->toArray());
         $category = Category::get();
         return view('product.editProduct',compact('data', 'category'));

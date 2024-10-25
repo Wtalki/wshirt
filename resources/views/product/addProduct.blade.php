@@ -62,7 +62,7 @@
                                 </div>
                                 <div class="card-body">
                                     {{-- form  --}}
-                                    <x-input  type="product" label="Name" placeholder="Name" :category="$category" />
+                                    <x-input  type="productCreate"  label="Name" placeholder="Name" :category="$category" />
                                     <x-button class="btn-primary mx-auto w-50" type="create" />
                                 </div>
                             </div>

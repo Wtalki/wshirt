@@ -60,6 +60,7 @@
                                     <th class="text-center min-w-100px">Price</th>
                                     <th class="text-center min-w-100px">SKU_Number</th>
                                     <th class="text-center min-w-70px">Category</th>
+                                    <th class="text-center min-w-70px">status</th>
                                     <th class="text-center min-w-70px">Date</th>
                                     <th class="text-center min-w-70px">Actions</th>
                                 </tr>

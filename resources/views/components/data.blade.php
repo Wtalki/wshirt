@@ -65,6 +65,13 @@
             <div class="badge badge-light-success categoryName">{{ $productData->category->name }}</div>
         </td>
         <td class="text-center pe-0" data-order="Inactive">
+            @if ($productData->status == 0)
+            <div class="badge badge-light-success categoryName">enable</div>
+            @elseif ($productData->status == 1)
+            <div class="badge badge-light-danger categoryName">disable</div>
+            @endif
+        </td>
+        <td class="text-center pe-0" data-order="Inactive">
             <div class="badge badge-light-success categoryName">{{ $productData->created_at->format('m/d/Y') }}</div>
         </td>
         <td class="text-end">
