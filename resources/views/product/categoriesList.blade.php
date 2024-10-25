@@ -116,7 +116,7 @@
                             </thead>
                             <tbody class="fw-semibold text-gray-600 myTable">
                                 @foreach ($data as $c)
-                                <x-data :data="$c" />
+                                <x-data :data="$c" type="categoryList" />
                             @endforeach
                             </tbody>
                         </table>

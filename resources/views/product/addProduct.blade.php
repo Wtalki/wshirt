@@ -47,10 +47,9 @@
                                             <img src="{{asset('default/default.png')}}" class="showImg img-thumbnail" alt="Default Image" id="imagePreview" width="150" height="150">
                                         </div>
                                     </div>
-                                    {{-- <x-image name='images[]' type='productImage' :isMultiple="true" /> --}}
                                     <div class="form-group mt-5 p-6">
                                         <label class="form-label">Tags</label>
-                                        <input class="form-control form-control-solid" value="" id="kt_tagify_tags"/>
+                                        <input class="form-control form-control-solid" name="tags[]" value="" id="kt_tagify_tags"/>
                                     </div>
                                 </div>
 
@@ -110,6 +109,7 @@
                 }
 
             });
+
             $('#inputRange').on('input', function() {
                 $('#rangeValue').text($(this).val() + '%');
             });
@@ -196,9 +196,11 @@
                     $(element).removeClass('is-invalid').addClass('is-valid');
                 }
             })
+    });
 
-        });
-
+    //type
+    var input1 = document.querySelector("#kt_tagify_3");
+    new Tagify(input1);
 
         // color
         var tagify = new Tagify(document.querySelector('#kt_tagify_colors'), {

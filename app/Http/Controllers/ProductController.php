@@ -2,12 +2,14 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Tag;
 use App\Models\Size;
 use App\Models\Color;
 use App\Models\Image;
 use App\Models\Product;
 use App\Models\Category;
 use App\Models\Discount;
+use Illuminate\Support\Str;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
@@ -16,7 +18,8 @@ class ProductController extends Controller
 {
     //product list
     function productList(){
-        $data = Product::with(['images','discounts','category','colors','sizes'])->orderBy('created_at','desc')->get();
+        $data = Product::with(['images','discounts','category','colors','sizes','tags'])->orderBy('created_at','desc')->get();
+        dd($data->toArray());
         $category = Category::get();
         return view('product/productList',compact('data','category'));
     }
@@ -30,13 +33,11 @@ class ProductController extends Controller
 
     //product create
     function productCreate(Request $request){
-        dd($request->toArray());
-        //product data
+        // dd($request->toArray());
 
         $data = $this->productData($request);
         $product = Product::create($data);
 
-        //discount data
         $discount = [
             'product_id' => $product->id,
             'percentage' => $request->percentage,
@@ -44,21 +45,46 @@ class ProductController extends Controller
         ];
         Discount::create($discount);
 
-        foreach($request->colors as $color){
-             $productColor = [
-            'product_id' => $product->id,
-            'color' => $color,
-            ];
-            Color::create($productColor);
+        //color
+        foreach ($request->colors as $colorJson) {
+            $colors = json_decode($colorJson, true);
+
+            foreach ($colors as $color) {
+                $productColor = [
+                    'product_id' => $product->id,
+                    'color' => $color['value'],
+                    'color_code' => $color['code'],
+                ];
+                Color::create($productColor);
+            }
         }
 
-        foreach ($request->sizes as $size) {
-            $productSize = [
-            'product_id' => $product->id,
-            'size' => $size
-        ];
-            Size::create($productSize);
+        //sizes
+        foreach ($request->sizes as $sizeJson) {
+            $sizes = json_decode($sizeJson, true);
+
+            foreach ($sizes as $size) {
+                $productSize = [
+                    'product_id' => $product->id,
+                    'size' => $size['value'],
+                ];
+                Size::create($productSize);
+            }
         }
+
+        //tags
+        foreach ($request->tags as $tagJson) {
+            $tags = json_decode($tagJson, true);
+
+            foreach ($tags as $tag) {
+                $productTag = [
+                    'product_id' => $product->id,
+                    'tags' => $tag['value'],
+                ];
+                Tag::create($productTag);
+            }
+        }
+
         if($request->hasFile('images')){
             foreach($request->file('images') as $image){
                 $path = $image->store('images', 'public');
@@ -71,6 +97,8 @@ class ProductController extends Controller
         }
         return back();
     }
+
+
 
     //product multiple delete
     function deleteMultipleProduct(Request $request){
@@ -158,15 +186,28 @@ class ProductController extends Controller
     }
     //product data
     private function productData($request){
+        $types = json_decode($request->type, true);
         return [
             'name' => $request->name,
             'price' => $request->price,
+            'sku_number' => $this->generateUniqueSku(),
             'category_id' => $request->category,
-            'type' => $request->type,
+            'type' => $types[0]['value'] ?? null,
             'cover' => $request->cover,
             'description' => $request->description,
+            'stock' => $request->stock,
             'gender' => $request->gender,
         ];
     }
+    function generateUniqueSku()
+    {
+        do {
+            $sku = 'SKU-' . strtoupper(Str::random(8));
+        } while (Product::where('sku_number', $sku)->exists());
+
+        return $sku;
+    }
 
 }
+
+

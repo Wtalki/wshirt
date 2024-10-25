@@ -15,7 +15,7 @@ return new class extends Migration
             $table->id();
             $table->unsignedBigInteger('category_id');
             $table->string('name');
-            $table->integer('sku_number')->nullable();
+            $table->string('sku_number')->nullable();
             $table->string('gender');
             $table->integer('stock');
             $table->string('price');

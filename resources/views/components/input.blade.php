@@ -53,7 +53,7 @@
 
 <div class="d-flex flex-column p-5">
     <label class="form-label" id="">Type</label>
-    <input class="form-control form-control " name="type" placeholder="Enter tags" value="" id="kt_tagify_3"/>
+    <input class="form-control form-control " name="type" placeholder="Enter Type" value="" id="kt_tagify_3"/>
 </div>
 
 <div class="d-flex flex-column p-5">
