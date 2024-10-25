@@ -35,7 +35,7 @@
         @if ($label)
             <label class="form-label">Name</label>
         @endif
-        <input type="text" name="name" class="form-control" placeholder="{{ $placeholder }}"
+        <input type="text" name="name" class="form-control" placeholder="{{ $placeholder }}" value="{{$product->name}}"
             {{ $attributes }} />
     @endif
 
@@ -153,14 +153,12 @@
 
     <div class="d-flex flex-column p-5">
         <label class="form-label">Choose Colors</label>
-        {{$product->colors}}
         {{ implode(', ', $product->colors->pluck('color')->unique()->toArray()) }}
         <input class="form-control d-flex align-items-center color" name="colors[]" value="{{{ implode(', ', $product->colors->pluck('color')->unique()->toArray()) }}}"
             id="kt_tagify_colors" />
     </div>
     <div class="d-flex flex-column p-5">
         <label class="form-label">Choose Sizes</label>
-        {{$product->sizes}}
         {{ implode(', ', $product->sizes->pluck('size')->unique()->toArray()) }}
         <input class="form-control d-flex align-items-center" name="sizes[]" value="{{ implode(', ', $product->sizes->pluck('size')->unique()->toArray()) }}" id="kt_tagify_sizes" />
     </div>
