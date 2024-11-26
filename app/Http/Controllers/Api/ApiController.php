@@ -20,7 +20,7 @@ use Illuminate\Support\Facades\Hash;
 
 class ApiController extends Controller
 {
-    //user Register 
+    //user Register
     function userRegister(Request $request){
         $data = [
             'name' => $request->userName,
@@ -78,8 +78,8 @@ class ApiController extends Controller
             $product->increment('view_count');
         }
     }
-    
-    //product detail 
+
+    //product detail
     function productDetail(Request $request){
         $data = Product::where('id',$request->productId)->with(['images','discounts','category','colors','sizes'])->first();
         return response()->json([
@@ -94,7 +94,7 @@ class ApiController extends Controller
             'user_id' => $request->userId,
             'size' => $request->size,
             'color' => $request->color,
-            'image' => $request->image, 
+            'image' => $request->image,
             'qty' => $request->qty,
         ];
         Cart::create($data);
@@ -147,7 +147,7 @@ class ApiController extends Controller
             'order_id' =>$orderId->id,
             'name' => $request->name,
             'phone' => $request->phone,
-            'address' => $request->address, 
+            'address' => $request->address,
             'trans_id' => $request->transId,
 
         ];
@@ -211,7 +211,7 @@ class ApiController extends Controller
         // ->leftJoin('products','discounts.product_id','products.id')
         // ->leftJoin('images','discounts.product_id','images.product_id')
         // ->get();
-        $data=Product::where('cover','cover')->with(['discounts','images'])->paginate(4);
+        $data=Product::where('cover','cover')->with(['discounts','images'])->orderBy('id','desc')->take(4)->get();
        return response()->json([
             'status' =>  'success',
             'discounts' => $data,

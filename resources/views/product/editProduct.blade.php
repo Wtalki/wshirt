@@ -30,7 +30,7 @@
         </div>
         <div id="kt_app_content" class="app-content flex-column-fluid">
             <div id="kt_app_content_container" class="app-container container-fluid">
-                <form action="{{ route('product#create') }}" id="myForm" method="POST" enctype="multipart/form-data">
+                <form action="{{ route('product#edit') }}" id="myForm" method="POST" enctype="multipart/form-data">
                     @csrf
                     <div class="row">
                         <div class="col-4">
@@ -41,11 +41,10 @@
                                 <div class="card-body">
                                     <div class="form-group mt-5 border p-6 text-center">
                                         <label for="imageUpload" class="btn btn-primary">Upload Image</label>
-                                        <input type="file" name="images[]" class="form-control" style="display: none;" id="imageUpload" multiple   accept="image/*">
-
+                                        <input type="file" name="images[]" class="form-control" style="display: none;" id="imageUpload" value="" multiple   accept="image/*">
                                         <div class="row mt-3" id="imagePreviewContainer">
                                             @foreach ($data->images as $images )
-
+                                            <input type="hidden" name="images[]" value="{{ $images->path }}" />
                                             <img src="{{asset('storage/' . $images->path)}}" class="showImg img-thumbnail" alt="Default Image" id="imagePreview" width="150" height="150">
                                             @endforeach
                                         </div>
@@ -55,7 +54,6 @@
                                         <input class="form-control form-control-solid" name="tags[]" value="{{ implode(', ', $data->tags->pluck('tags')->unique()->toArray()) }}" id="kt_tagify_tags"/>
                                     </div>
                                 </div>
-
                             </div>
                         </div>
                         <div class="col-8">
@@ -66,11 +64,10 @@
                                 <div class="card-body">
                                     {{-- form  --}}
                                     <x-input  type="productEdit"  :product="$data" label="Name" placeholder="Name" :category="$category" />
-                                    <x-button class="btn-primary mx-auto w-50" type="create" />
+                                    <x-button class="btn-primary mx-auto w-50" type="update" />
                                 </div>
                             </div>
                         </div>
-
                     </div>
                 </form>
             </div>

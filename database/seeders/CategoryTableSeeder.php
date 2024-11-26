@@ -88,7 +88,7 @@ class CategoryTableSeeder extends Seeder
                 for ($j = 0; $j < 4; $j++) {
                 Image::insert([
                     'product_id' => $product->id,
-                    'path' =>'/images/' . rand(1,160) . '.jpg',
+                    'path' =>'images/' . rand(1,160) . '.jpg',
                 ]);
             }
             }

@@ -127,6 +127,7 @@
         </div>
     </div>
 @elseif ($type == 'productEdit')
+    <input type="hidden" name="productId" value="{{$product->id}}">
     <div class=" d-flex flex-column p-5 ">
         <label class="form-label">Gender</label>
         <select class="form-select" name="gender">
@@ -140,7 +141,7 @@
         <select class="form-select" name="category">
             <option value="">Choose Category</option>
             @foreach ($category as $c)
-                <option value="{{ $c->id }}" @if($product->id == $c->id) selected @endif>{{ $c->name }}</option>
+                <option value="{{ $c->id }}" @if($product->category_id == $c->id) selected @endif>{{ $c->name }}</option>
             @endforeach
         </select>
     </div>
@@ -173,6 +174,13 @@
     <div class=" d-flex flex-column p-5 mb-5">
         <label class="form-label" id="">Price</label>
         <input type="number" name="price" class="form-control" placeholder="Price" value="{{$product->price}}" />
+    </div>
+    <div class=" d-flex flex-column p-5 ">
+        <label class="form-label">Status</label>
+        <select class="form-select" name="status">
+            <option value="0" @if($product->status == 0) selected @endif>enable</option>
+            <option value="1" @if($product->status == 1) selected @endif>disable</option>
+        </select>
     </div>
     <div class="card-header ">
         <h1 class="align-self-center">Pricing</h1>

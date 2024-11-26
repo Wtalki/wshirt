@@ -18,23 +18,19 @@ class ProductController extends Controller
 {
     //product list
     function productList(){
-        $data = Product::with(['images','discounts','category','colors','sizes','tags'])->orderBy('created_at','desc')->get();
-        // dd($data->toArray());
+        $data = Product::with(['images','discounts','category','colors','sizes','tags'])->orderBy('updated_at','desc')->get();
         $category = Category::get();
         return view('product/productList',compact('data','category'));
     }
 
     //product create page
     function createProduct(){
-        $category = Category::orderBy('created_at', 'desc')->get();
-
+        $category = Category::orderBy('updated_at', 'desc')->get();
         return view('product.addProduct', compact('category'));
     }
 
     //product create
     function productCreate(Request $request){
-        // dd($request->toArray());
-
         $data = $this->productData($request);
         $product = Product::create($data);
 
@@ -71,8 +67,6 @@ class ProductController extends Controller
                 Size::create($productSize);
             }
         }
-        // dd($request->toArray());
-
 
         //tags
         if ($request->tags[0] != null){
@@ -102,8 +96,6 @@ class ProductController extends Controller
         return back();
     }
 
-
-
     //product multiple delete
     function deleteMultipleProduct(Request $request){
         Product::whereIn('id', $request->id)->delete();
@@ -127,15 +119,14 @@ class ProductController extends Controller
     //edit product
     function editProduct($id){
         $data = Product::where('id',$id)->with(['images','discounts','category','colors','sizes','tags'])->first();
-        // dd($data->toArray());
         $category = Category::get();
         return view('product.editProduct',compact('data', 'category'));
     }
 
     //product edit
     function productEdit(Request $request){
-
         $data = $this->productData($request);
+        $data['status'] = $request->status;
         Product::where('id',$request->productId)->update($data);
          $discount = [
             'product_id' =>$request->productId,
@@ -145,22 +136,52 @@ class ProductController extends Controller
         Discount::where('product_id',$request->productId)->update($discount);
 
         $productData = Product::findOrFail($request->productId);
+
         $productData->colors()->delete();
-        foreach($request->colors as $color){
-             $productColor = [
-            'product_id' => $request->productId,
-            'color' => $color,
-            ];
-            Color::create($productColor);
+        foreach ($request->colors as $colorJson) {
+            $colors = json_decode($colorJson, true);
+
+            foreach ($colors as $color) {
+                $productColor = [
+                    'product_id' => $request->productId,
+                    'color' => $color['value'],
+                    'color_code' => $color['code'],
+                ];
+                Color::create($productColor);
+            }
         }
+
         $productData->sizes()->delete();
-         foreach($request->sizes as $size){
-             $productSize = [
-            'product_id' => $request->productId,
-            'size' => $size,
-            ];
-            Size::create($productSize);
+        //sizes
+        foreach ($request->sizes as $sizeJson) {
+            $sizes = json_decode($sizeJson, true);
+
+            foreach ($sizes as $size) {
+                $productSize = [
+                    'product_id' => $request->productId,
+                    'size' => $size['value'],
+                ];
+                Size::create($productSize);
+            }
         }
+
+
+        //tags
+        if ($request->tags[0] != null){
+            $productData->tags()->delete();
+            foreach ($request->tags as $tagJson) {
+                $tags = json_decode($tagJson, true);
+
+                foreach ($tags as $tag) {
+                    $productTag = [
+                        'product_id' => $request->productId,
+                        'tags' => $tag['value'],
+                    ];
+                    Tag::create($productTag);
+                }
+            }
+        }
+
         if($request->hasFile('images')){
             $oldImage = Image::where('product_id', $request->productId)->get();
             foreach($oldImage as $old ){
